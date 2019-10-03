@@ -110,7 +110,11 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
                     }
                 }
                 print(return_val)
-                self.searchResults = return_val
+                DispatchQueue.main.async
+                {
+                    self.searchResults = return_val
+                    self.resultsTableView.reloadData()
+                }
 //                self.resultsTableView.reloadData()
             }
         })

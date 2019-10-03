@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import Foundation
 
 class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate
 {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var resultsTableView: UITableView!
-    var searchReasults: [(String, UIImage)] = []
+    var searchResults: [(String, UIImage)] = []
     
     override func viewDidLoad()
     {
@@ -24,90 +25,98 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return searchReasults.count
+        return searchResults.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
+        print(searchResults)
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchResultTableViewCell
-        cell.searchResultImage.image = searchReasults[indexPath.item].1
-        cell.searchResultTitleLable.text = searchReasults[indexPath.item].0
+        
+        let searchItem = searchResults[indexPath.item]
+        
+        cell.searchResultImage.image = searchItem.1
+        cell.searchResultTitleLable.text = searchItem.0
         
         return cell
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
+    {
         searchForShow(query: searchText)
+//        print(searchResults)
 //        resultsTableView.rowHeight = UITableView.automaticDimension
 //        resultsTableView.estimatedRowHeight = 100
-        resultsTableView.reloadData()
     }
     
     func searchForShow(query: String)
     {
-//        let image = UIImage(named: "iconfinder_video_call_2639945") ?? UIImage(named: "image_not_found")!
-        
-        // make HTTPS request here
-        let key = "5b22867e"
         let query_str = query.replacingOccurrences(of: " ", with: "%20")
-        if let url = URL(string: "https://omdbapi.com/?apikey=" + key + "&s=" + query_str)
-        {
-            let task = URLSession.shared.dataTask(with: url)
+        
+        let headers = [
+            "x-rapidapi-host": "movie-database-imdb-alternative.p.rapidapi.com",
+            "x-rapidapi-key": "340a219cafmsh46dd37c27d84644p14d7dejsn5e31939371b4"
+        ]
+        
+        let request = NSMutableURLRequest(url: NSURL(string: "https://movie-database-imdb-alternative.p.rapidapi.com/?page=1&r=json&s=" + query_str)! as URL,
+              cachePolicy: .useProtocolCachePolicy,
+              timeoutInterval: 10.0)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = headers
+        
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest, completionHandler:
+        { (data, response, error) -> Void in
+            if (error != nil)
             {
-                (data, response, error) in
-                if let data = data
+//                print(error)
+            }
+            else
+            {
+                var return_val: [(String, UIImage)] = []
+                let httpResponse = response as? HTTPURLResponse
+                if httpResponse?.statusCode ?? 400 < 300
                 {
                     do
                     {
-                        // Convert the data to JSON
-                        if let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
+                        let dictonary =  try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
+//                        print(dictonary)
+                        if let searches = dictonary?["Search"] as? [[String:String]]
                         {
-//                            print(jsonSerialized)
-                            if let result = jsonSerialized["Response"]
+                            for search in searches
                             {
-                                if result as! String == "True"
+//                                print(search)
+                                let title = search["Title"]
+                                let poster_url = search["Poster"]
+                                var poster = UIImage(named: "image_not_found")!
+                                if (poster_url != nil)
                                 {
-                                    if let searches = jsonSerialized["Search"] as? [[String : String]]
+                                    let url = URL(string: poster_url!)
+                                    let data = try? Data(contentsOf: url!)
+                                    //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+                                    if (data != nil)
                                     {
-                                        self.searchReasults = []
-                                        for search in searches
-                                        {
-                                            let title = search["Title"]
-                                            let poster_url = search["Poster"]
-                                            var poster = UIImage(named: "image_not_found")!
-                                            if (poster_url != nil)
-                                            {
-                                                let url = URL(string: poster_url!)
-                                                let data = try? Data(contentsOf: url!)
-                                                //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-                                                if (data != nil)
-                                                {
-                                                    poster = UIImage(data: data!) ?? UIImage(named: "image_not_found")!
-                                                }
-                                            }
-                                            self.searchReasults.append((title ?? "N/A", poster))
-                                        }
+                                        poster = UIImage(data: data!) ?? UIImage(named: "image_not_found")!
                                     }
                                 }
+                                return_val.append((title ?? "N/A", poster))
                             }
+//                            print(return_val)
                         }
-                        //                    print("json: ", jsonSerialized!)
                     }
                     catch let error as NSError
                     {
-                        print(error.localizedDescription)
+                        print("found error: ", error)
                     }
                 }
-                else if let error = error
-                {
-                    print(error.localizedDescription)
-                }
+                print(return_val)
+                self.searchResults = return_val
+//                self.resultsTableView.reloadData()
             }
-            task.resume()
-        }
-//        print(url) le
-//        searchReasults = [("test", image)]
-        
+        })
+        dataTask.resume()
+        self.resultsTableView.reloadData()
+        return
     }
     
 

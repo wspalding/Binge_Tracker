@@ -17,7 +17,7 @@
                     <view key="view" contentMode="scaleToFill" id="uzY-kp-qdh">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="BZm-cv-Jky"/>
                     </view>
                     <navigationItem key="navigationItem" id="31c-8R-qZT"/>
@@ -62,6 +62,7 @@
                                         <connections>
                                             <outlet property="searchResultImage" destination="4vN-iG-bY9" id="nkj-c7-3D4"/>
                                             <outlet property="searchResultTitleLable" destination="WoH-4I-xZq" id="hna-qR-4nd"/>
+                                            <segue destination="QQZ-0m-zeu" kind="show" id="56C-gu-Ney"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -83,7 +84,7 @@
                                 </connections>
                             </searchBar>
                         </subviews>
-                        <color key="backgroundColor" red="0.47684186699999997" green="0.50480759139999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="l79-KM-CGI"/>
                     </view>
                     <navigationItem key="navigationItem" id="ZXt-FJ-6qm"/>
@@ -95,6 +96,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n3v-s0-zE0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="140.57971014492756" y="77.678571428571431"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="DRr-TM-I21">
+            <objects>
+                <viewController id="QQZ-0m-zeu" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XeN-PX-jVb">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="ChO-Ko-GlU"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rnK-Qg-NAa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="964" y="78"/>
         </scene>
         <!--Show View Controller-->
         <scene sceneID="O3t-YP-E4b">
@@ -148,7 +164,7 @@
                                 </connections>
                             </collectionView>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="rwc-gV-06j"/>
                     </view>
                     <navigationItem key="navigationItem" id="0mf-SW-MzC"/>
@@ -179,7 +195,7 @@
                     <view key="view" contentMode="scaleToFill" id="1GD-M0-O7s">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.016804177310000001" green="0.19835099580000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="jAs-1y-gTi"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Calender" id="uWO-Ap-3FU"/>

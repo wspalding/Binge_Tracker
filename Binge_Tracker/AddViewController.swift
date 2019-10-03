@@ -55,7 +55,7 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         
         let headers = [
             "x-rapidapi-host": "movie-database-imdb-alternative.p.rapidapi.com",
-            "x-rapidapi-key": "340a219cafmsh46dd37c27d84644p14d7dejsn5e31939371b4"
+            "x-rapidapi-key": apiKey
         ]
         
         let request = NSMutableURLRequest(url: NSURL(string: "https://movie-database-imdb-alternative.p.rapidapi.com/?page=1&r=json&s=" + query_str)! as URL,

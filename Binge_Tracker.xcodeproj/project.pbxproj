@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D331B572345D14900EA601B /* secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D331B562345D14900EA601B /* secrets.swift */; };
 		3D6FA342233B319D005640BE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FA341233B319D005640BE /* AppDelegate.swift */; };
 		3D6FA344233B319D005640BE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FA343233B319D005640BE /* ViewController.swift */; };
 		3D6FA347233B319D005640BE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D6FA345233B319D005640BE /* Main.storyboard */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3D331B562345D14900EA601B /* secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = secrets.swift; sourceTree = "<group>"; };
 		3D6FA33E233B319D005640BE /* Binge_Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Binge_Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D6FA341233B319D005640BE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D6FA343233B319D005640BE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				3D6FA345233B319D005640BE /* Main.storyboard */,
 				3D6FA37E233C8549005640BE /* SearchResultTableViewCell.swift */,
 				3D6FA37C233C1830005640BE /* AddViewController.swift */,
+				3D331B562345D14900EA601B /* secrets.swift */,
 				3D6FA34B233B319F005640BE /* Assets.xcassets */,
 				3D6FA34D233B319F005640BE /* LaunchScreen.storyboard */,
 				3D6FA350233B319F005640BE /* Info.plist */,
@@ -272,6 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D6FA37F233C8549005640BE /* SearchResultTableViewCell.swift in Sources */,
+				3D331B572345D14900EA601B /* secrets.swift in Sources */,
 				3D6FA344233B319D005640BE /* ViewController.swift in Sources */,
 				3D6FA34A233B319D005640BE /* Binge_Tracker.xcdatamodeld in Sources */,
 				3D6FA37D233C1830005640BE /* AddViewController.swift in Sources */,

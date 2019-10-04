@@ -90,7 +90,6 @@ class addShowViewController: UIViewController {
                         self.showInfoLabel.isHidden = false
                         self.showPlotLabel.text = plotString
                         self.showPlotLabel.isHidden = false
-//                        test
                     }
                 }
             })

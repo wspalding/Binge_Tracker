@@ -65,25 +65,25 @@ class addShowViewController: UIViewController {
                             let dictonary =  try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
 //                            print(dictonary)
                             if let plot = dictonary?["Plot"]
-                            {
-                                plotString = "\(plot)"
-                            }
+                            { plotString = "\(plot)" }
+                            
+                            if let type = dictonary?["Type"]
+                            { infoString.append("Type: \(type)\n") }
+                            
                             if let genre = dictonary?["Genre"]
-                            {
-                                infoString.append("Genre: \(genre)\n")
-                            }
+                            { infoString.append("Genre: \(genre)\n") }
+                            
                             if let release = dictonary?["Released"]
-                            {
-                                infoString.append("Release Date: \(release)\n")
-                            }
+                            { infoString.append("Release Date: \(release)\n") }
+                            
                             if let metaScore = dictonary?["Metascore"]
-                            {
-                                infoString.append("Metascore: \(metaScore)\n")
-                            }
+                            { infoString.append("Metascore: \(metaScore)\n") }
+                            
                             if let imdbRating = dictonary?["imdbRating"]
-                            {
-                                infoString.append("imdbRating: \(imdbRating)\n")
-                            }
+                            { infoString.append("imdbRating: \(imdbRating)\n") }
+                            
+                            if let runTime = dictonary?["Runtime"]
+                            { infoString.append("Runtime: \(runTime)\n") }
                         }
                         catch let error as NSError
                         {

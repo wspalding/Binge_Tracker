@@ -69,10 +69,10 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func searchForShow(query: String)
     {
         let query_str = query.replacingOccurrences(of: " ", with: "%20")
-        if let query_url = URL(string: "https://movie-database-imdb-alternative.p.rapidapi.com/?page=1&r=json&s=" + query_str)
+        if URL(string: "https://movie-database-imdb-alternative.p.rapidapi.com/?page=1&r=json&s=" + query_str) == nil
         {
-            print(query_url)
-        } else {return}
+            return
+        }
         
         let headers = [
             "x-rapidapi-host": "movie-database-imdb-alternative.p.rapidapi.com",
@@ -135,7 +135,7 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
                         print("found error: ", error)
                     }
                 }
-                print(return_val)
+//                print(return_val)
                 DispatchQueue.main.async
                 {
                     if return_val != []

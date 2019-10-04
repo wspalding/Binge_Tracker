@@ -70,11 +70,19 @@ class addShowViewController: UIViewController {
                             }
                             if let genre = dictonary?["Genre"]
                             {
-                                infoString.append("Genre: \(genre) \n")
+                                infoString.append("Genre: \(genre)\n")
                             }
                             if let release = dictonary?["Released"]
                             {
-                                infoString.append("Release Date: \(release) \n")
+                                infoString.append("Release Date: \(release)\n")
+                            }
+                            if let metaScore = dictonary?["Metascore"]
+                            {
+                                infoString.append("Metascore: \(metaScore)\n")
+                            }
+                            if let imdbRating = dictonary?["imdbRating"]
+                            {
+                                infoString.append("imdbRating: \(imdbRating)\n")
                             }
                         }
                         catch let error as NSError
@@ -86,8 +94,10 @@ class addShowViewController: UIViewController {
                     {
                         self.loadingView.stopAnimating()
                         self.loadingView.isHidden = true
+                        
                         self.showInfoLabel.text = infoString
                         self.showInfoLabel.isHidden = false
+                        
                         self.showPlotLabel.text = plotString
                         self.showPlotLabel.isHidden = false
                     }

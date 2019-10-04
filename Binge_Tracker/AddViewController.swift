@@ -13,14 +13,29 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
 {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var resultsTableView: UITableView!
-    var searchResults: [(String, UIImage)] = []
+    @IBOutlet weak var loadingView: UIActivityIndicatorView!
+    
+    var searchResults: [Show] = []
+    var selected: Show?
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
         resultsTableView.rowHeight = 100
+        loadingView.isHidden = true
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        selected = searchResults[indexPath.item]
+        performSegue(withIdentifier: "show", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        let vc = segue.destination as! addShowViewController
+        vc.show = selected ?? Show(_name: "N/A", _image: UIImage(named: "image_not_found")!, _info: [:])
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
@@ -30,23 +45,25 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        print(searchResults)
+//        print(searchResults)
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCell") as! SearchResultTableViewCell
         
         let searchItem = searchResults[indexPath.item]
         
-        cell.searchResultImage.image = searchItem.1
-        cell.searchResultTitleLable.text = searchItem.0
+        cell.searchResultImage.image = searchItem.image
+        cell.searchResultTitleLable.text = searchItem.name
         
         return cell
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
     {
-        searchForShow(query: searchText)
-//        print(searchResults)
-//        resultsTableView.rowHeight = UITableView.automaticDimension
-//        resultsTableView.estimatedRowHeight = 100
+        if searchText == ""
+        {
+            searchResults = []
+            resultsTableView.reloadData()
+        } else { searchForShow(query: searchText) }
+
     }
     
     func searchForShow(query: String)
@@ -73,7 +90,12 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
             }
             else
             {
-                var return_val: [(String, UIImage)] = []
+                DispatchQueue.main.async
+                {
+                    self.loadingView.startAnimating()
+                    self.loadingView.isHidden = false
+                }
+                var return_val: [Show] = []
                 let httpResponse = response as? HTTPURLResponse
                 if httpResponse?.statusCode ?? 400 < 300
                 {
@@ -86,7 +108,8 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
                             for search in searches
                             {
 //                                print(search)
-                                let title = search["Title"]
+                                
+                                let title = search["Title"] ?? "N/A"
                                 let poster_url = search["Poster"]
                                 var poster = UIImage(named: "image_not_found")!
                                 if (poster_url != nil)
@@ -99,9 +122,8 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
                                         poster = UIImage(data: data!) ?? UIImage(named: "image_not_found")!
                                     }
                                 }
-                                return_val.append((title ?? "N/A", poster))
+                                return_val.append(Show(_name: title, _image: poster, _info: search))
                             }
-//                            print(return_val)
                         }
                     }
                     catch let error as NSError
@@ -114,12 +136,14 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
                 {
                     self.searchResults = return_val
                     self.resultsTableView.reloadData()
+                    self.loadingView.stopAnimating()
+                    self.loadingView.isHidden = true
                 }
 //                self.resultsTableView.reloadData()
             }
         })
         dataTask.resume()
-        self.resultsTableView.reloadData()
+//        self.resultsTableView.reloadData()
         return
     }
     

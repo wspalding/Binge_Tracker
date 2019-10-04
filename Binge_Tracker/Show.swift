@@ -14,25 +14,34 @@ enum Status
     case watching
     case backlog
 }
+
 class Show: NSObject
 {
-    
     var name: String
-    var status: Status
-    var numberOfEpisodes: Int
-    var numberOfSeasons: Int
     var image: UIImage
-    var runTime: TimeInterval
+    var info: [String:String]
+    var schedual: Schedual?
     
-    init(_name:String, _status: Status, _numberOfEpisodes: Int, _numberOfSeasons: Int, _image: UIImage?, _runTime: TimeInterval)
+    init(_name:String, _image: UIImage?, _info: [String:String], _schedual:Schedual? = nil)
     {
         name = _name
-        status = _status
-        numberOfEpisodes = _numberOfEpisodes
         image = _image ?? UIImage(named: "image_not_found")!
-        runTime = _runTime
-        numberOfSeasons = _numberOfSeasons
+        info = _info
+        schedual = _schedual
     }
     
+    func addSchedual(_schedual: Schedual)
+    {
+        schedual = _schedual
+    }
+}
+
+class Schedual: NSObject
+{
+    var status: Status
     
+    init(_status: Status)
+    {
+        status = _status
+    }
 }

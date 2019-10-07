@@ -8,14 +8,19 @@
 
 import UIKit
 
-class addShowViewController: UIViewController {
+class addShowViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
+{
+    
     @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var posterImage: UIImageView!
     @IBOutlet weak var showInfoLabel: UILabel!
     @IBOutlet weak var showPlotLabel: UILabel!
     @IBOutlet weak var loadingView: UIActivityIndicatorView!
+    @IBOutlet weak var statusPickerView: UIPickerView!
     
+    let statusOptions = ["", "backlog", "watching", "completed", "dropped"]
     var show: Show = Show(_name: "N/A", _image: UIImage(named: "image_not_found")!, _info: [:])
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,6 +112,68 @@ class addShowViewController: UIViewController {
             dataTask.resume()
         }
         showInfoLabel.text = infoString
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int
+    {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
+    {
+        return statusOptions.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return statusOptions[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
+    {
+        if row != 0
+        {
+            
+            var found = false
+    
+            let stat = statusOptions[row]
+            print(stat)
+            if let savedShows = defaults.object(forKey: showKey) as? Data
+            {
+                if var decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [Show]
+                {
+                    for s in decodedShows
+                    {
+                        if s.name == show.name
+                        {
+                            found = true
+                            s.addSchedual(_schedual: Schedual(_status: stat))
+                        }
+                    }
+                    if !found
+                    {
+                        show.addSchedual(_schedual: Schedual(_status: stat))
+                        decodedShows.append(show)
+                    }
+                    saveShows(decodedShows)
+                }
+            }
+            else
+            {
+                show.addSchedual(_schedual: Schedual(_status: stat))
+                saveShows([show])
+            }
+        }
+        
+    }
+    
+    func saveShows(_ shows:[Show])
+    {
+//        print("save called")
+        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: shows, requiringSecureCoding: false)
+        {
+            defaults.set(savedData, forKey: showKey)
+//            print("saved")
+        }
     }
     
     /*

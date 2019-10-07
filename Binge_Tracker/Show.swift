@@ -8,15 +8,17 @@
 
 import UIKit
 
-enum Status
-{
-    case finishd
-    case watching
-    case backlog
-}
+//enum Status
+//{
+//    case finishd
+//    case watching
+//    case backlog
+//    case dropped
+//}
 
-class Show: NSObject
+class Show: NSObject, NSCoding
 {
+    
     var name: String
     var image: UIImage
     var info: [String:String]
@@ -34,14 +36,36 @@ class Show: NSObject
     {
         schedual = _schedual
     }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(name, forKey: "nameKey")
+        aCoder.encode(image, forKey: "imageKey")
+        aCoder.encode(info, forKey: "infoKey")
+        aCoder.encode(schedual, forKey: "schedualKey")
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        name = aDecoder.decodeObject(forKey: "nameKey") as? String ?? "ERROR"
+        image = aDecoder.decodeObject(forKey: "imageKey") as? UIImage ?? UIImage(named: "image_not_found")!
+        info = aDecoder.decodeObject(forKey: "infoKey") as? [String:String] ?? [:]
+        schedual = aDecoder.decodeObject(forKey: "schedualKey") as? Schedual ?? nil
+    }
 }
 
-class Schedual: NSObject
+class Schedual: NSObject, NSCoding
 {
-    var status: Status
+    var status: String
     
-    init(_status: Status)
+    init(_status: String)
     {
         status = _status
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(status, forKey: "statusKey")
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        status = aDecoder.decodeObject(forKey: "statusKey") as? String ?? ""
     }
 }

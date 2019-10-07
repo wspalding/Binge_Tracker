@@ -11,5 +11,6 @@ import UIKit
 class ShowCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var showImageView: UIImageView!
     @IBOutlet weak var showTitleLabel: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
     
 }

@@ -169,7 +169,33 @@ class addShowViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     func saveShows(_ shows:[Show])
     {
 //        print("save called")
-        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: shows, requiringSecureCoding: false)
+        var watchingShows:[Show] = []
+        var backlogShows:[Show] = []
+        var completedShows:[Show] = []
+        var droppedShows:[Show] = []
+        
+        for s in shows
+        {
+            switch s.schedual?.status
+            {
+            case "watching":
+                watchingShows.append(s)
+                break
+            case "backlog":
+                backlogShows.append(s)
+                break
+            case "completed":
+                completedShows.append(s)
+                break
+            case "dropped":
+                droppedShows.append(s)
+                break
+            default:
+                break
+            }
+        }
+        let showsArr = [watchingShows,backlogShows,completedShows,droppedShows]
+        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: showsArr, requiringSecureCoding: false)
         {
             defaults.set(savedData, forKey: showKey)
 //            print("saved")

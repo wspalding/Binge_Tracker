@@ -13,18 +13,21 @@ class ShowViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBOutlet weak var showViewContrller: UICollectionView!
     var selected: Show?
+    let headerID = "sectionHeader"
+    let sectionHeaders = ["watching","backlog","completed","dropped"]
     
     let defaults = UserDefaults.standard
-    var showsArr: [Show] {
+    var showsArr: [[Show]] {
         print("getting shows array")
         if let savedShows = defaults.object(forKey: showKey) as? Data
         {
-            if let decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [Show]
+            if let decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [[Show]]
             {
                 return decodedShows
             }
         }
-        return []
+        print("none found")
+        return [[],[],[],[]]
     }
     
     
@@ -47,22 +50,38 @@ class ShowViewController: UIViewController, UICollectionViewDelegate, UICollecti
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
+//        TODO: section is the var im looking for
+        return showsArr[section].count
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return showsArr.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell", for: indexPath) as! ShowCollectionViewCell
+//        indexPath.section is the var for the section
         
-        cell.showTitleLabel.text = showsArr[indexPath.item].name
-        cell.showImageView.image = showsArr[indexPath.item].image
-        cell.statusLabel.text = showsArr[indexPath.item].schedual?.status ?? ""
+        cell.showTitleLabel.text = showsArr[indexPath.section][indexPath.item].name
+        cell.showImageView.image = showsArr[indexPath.section][indexPath.item].image
+        cell.statusLabel.text = showsArr[indexPath.section][indexPath.item].schedual?.status ?? ""
         
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selected = showsArr[indexPath.item]
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView
+    {
+        let sectionHeaderView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: indexPath) as! SectionCollectionReusableView
+        
+        sectionHeaderView.sectionLabel.text = sectionHeaders[indexPath.section]
+        
+        return sectionHeaderView
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
+    {
+        selected = showsArr[indexPath.section][indexPath.item]
         performSegue(withIdentifier: "show2", sender: self)
     }
 }

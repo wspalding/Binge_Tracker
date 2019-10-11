@@ -22,6 +22,7 @@
 		3D6FA37D233C1830005640BE /* AddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FA37C233C1830005640BE /* AddViewController.swift */; };
 		3D6FA37F233C8549005640BE /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FA37E233C8549005640BE /* SearchResultTableViewCell.swift */; };
 		3DAECB59234A5A13005ACC23 /* SingleShowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAECB58234A5A13005ACC23 /* SingleShowViewController.swift */; };
+		3DBE3743234FC41C0067C625 /* SectionCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBE3742234FC41C0067C625 /* SectionCollectionReusableView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		3D6FA37C233C1830005640BE /* AddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		3D6FA37E233C8549005640BE /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		3DAECB58234A5A13005ACC23 /* SingleShowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleShowViewController.swift; sourceTree = "<group>"; };
+		3DBE3742234FC41C0067C625 /* SectionCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCollectionReusableView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 			children = (
 				3D6FA341233B319D005640BE /* AppDelegate.swift */,
 				3D6FA343233B319D005640BE /* ViewController.swift */,
+				3DBE3742234FC41C0067C625 /* SectionCollectionReusableView.swift */,
 				3D6FA37A233C06BA005640BE /* ShowCollectionViewCell.swift */,
 				3DAECB58234A5A13005ACC23 /* SingleShowViewController.swift */,
 				3D6FA378233B433B005640BE /* Show.swift */,
@@ -280,6 +283,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DBE3743234FC41C0067C625 /* SectionCollectionReusableView.swift in Sources */,
 				3D6FA37F233C8549005640BE /* SearchResultTableViewCell.swift in Sources */,
 				3D331B572345D14900EA601B /* secrets.swift in Sources */,
 				3D331B5923466BF000EA601B /* AddShowViewController.swift in Sources */,

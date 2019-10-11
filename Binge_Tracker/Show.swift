@@ -18,7 +18,6 @@ import UIKit
 
 class Show: NSObject, NSCoding
 {
-    
     var name: String
     var image: UIImage
     var info: [String:String]
@@ -68,4 +67,14 @@ class Schedual: NSObject, NSCoding
     required init?(coder aDecoder: NSCoder) {
         status = aDecoder.decodeObject(forKey: "statusKey") as? String ?? ""
     }
+}
+
+func saveShows(showArr: [[Show]])
+{
+    
+}
+
+func getShows() -> [[Show]]
+{
+    return [[]]
 }

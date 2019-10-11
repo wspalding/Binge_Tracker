@@ -17,7 +17,7 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
     @IBOutlet weak var plotLabel: UILabel!
     @IBOutlet weak var statusPickerView: UIPickerView!
     
-    let statusOptions = ["", "backlog", "watching", "completed", "dropped"]
+    let statusOptions = ["remove", "backlog", "watching", "completed", "dropped"]
     let defaults = UserDefaults.standard
     var show: Show?
 
@@ -50,11 +50,9 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
     {
         if row != 0
         {
-            
             var found = false
-            
             let stat = statusOptions[row]
-            print(stat)
+//            print(stat)
             if let savedShows = defaults.object(forKey: showKey) as? Data
             {
                 if var decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [Show]
@@ -81,12 +79,57 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
                 saveShows([show!])
             }
         }
+        else
+        {
+//            print("removing")
+            if let savedShows = defaults.object(forKey: showKey) as? Data
+            {
+                if var decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [Show]
+                {
+                    for s in decodedShows
+                    {
+                        if s.name == show?.name
+                        {
+                            decodedShows.remove(at: decodedShows.firstIndex(of: s)!)
+                            break
+                        }
+                    }
+                    saveShows(decodedShows)
+                }
+            }
+        }
     }
     
     func saveShows(_ shows:[Show])
     {
         //        print("save called")
-        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: shows, requiringSecureCoding: false)
+        var watchingShows:[Show] = []
+        var backlogShows:[Show] = []
+        var completedShows:[Show] = []
+        var droppedShows:[Show] = []
+        
+        for s in shows
+        {
+            switch s.schedual?.status
+            {
+            case "watching":
+                watchingShows.append(s)
+                break
+            case "backlog":
+                backlogShows.append(s)
+                break
+            case "completed":
+                completedShows.append(s)
+                break
+            case "dropped":
+                droppedShows.append(s)
+                break
+            default:
+                break
+            }
+        }
+        let showsArr = [watchingShows,backlogShows,completedShows,droppedShows]
+        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: showsArr, requiringSecureCoding: false)
         {
             defaults.set(savedData, forKey: showKey)
             //            print("saved")

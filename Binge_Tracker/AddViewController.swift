@@ -28,7 +28,7 @@ class AddViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        selected = searchResults[indexPath.item]
+        selected = getShow(with: searchResults[indexPath.item].name) ?? searchResults[indexPath.item]
         performSegue(withIdentifier: "show", sender: self)
     }
     

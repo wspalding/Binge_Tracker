@@ -17,18 +17,18 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
     @IBOutlet weak var plotLabel: UILabel!
     @IBOutlet weak var statusPickerView: UIPickerView!
     
-    let statusOptions = ["remove", "backlog", "watching", "completed", "dropped"]
+    let statusOptions = ["remove"] + sectionHeaders
     let defaults = UserDefaults.standard
-    var show: Show?
+    var show: Show = Show(_name: "N/A", _image: UIImage(named: "image_not_found")!, _info: [:])
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        titleLabel.text = show?.name
-        posterImage.image = show?.image
+        titleLabel.text = show.name
+        posterImage.image = show.image
 //        infoLabel.text = show?.info
-        statusPickerView.selectRow(statusOptions.firstIndex(of: show?.schedual?.status ?? "") ?? 0, inComponent: 0, animated: false)
+        statusPickerView.selectRow(statusOptions.firstIndex(of: show.schedual?.status ?? "") ?? 0, inComponent: 0, animated: false)
         
     }
     
@@ -48,94 +48,40 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
-        if row != 0
+        var savedShows = getShows()
+        print("original:", savedShows)
+        let currStatus = show.schedual?.status
+        //        print(currStatus)
+        let currStatusIndex = statusOptions.firstIndex(of: currStatus ?? "") ?? 0
+        if currStatusIndex != row
         {
-            var found = false
-            let stat = statusOptions[row]
-//            print(stat)
-            if let savedShows = defaults.object(forKey: showKey) as? Data
+            print("need to change something, \(currStatusIndex), \(row)")
+            if row <= 0
             {
-                if var decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [Show]
-                {
-                    for s in decodedShows
-                    {
-                        if s.name == show?.name
-                        {
-                            found = true
-                            s.addSchedual(_schedual: Schedual(_status: stat))
-                        }
-                    }
-                    if !found
-                    {
-                        show?.addSchedual(_schedual: Schedual(_status: stat))
-                        decodedShows.append(show!)
-                    }
-                    saveShows(decodedShows)
-                }
+                show.schedual = nil
+                savedShows = removeShow(with: show.name, shows: savedShows)
             }
             else
             {
-                show!.addSchedual(_schedual: Schedual(_status: stat))
-                saveShows([show!])
-            }
-        }
-        else
-        {
-//            print("removing")
-            if let savedShows = defaults.object(forKey: showKey) as? Data
-            {
-                if var decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [Show]
+                
+                if currStatusIndex > 0
                 {
-                    for s in decodedShows
-                    {
-                        if s.name == show?.name
-                        {
-                            decodedShows.remove(at: decodedShows.firstIndex(of: s)!)
-                            break
-                        }
-                    }
-                    saveShows(decodedShows)
+                    show.schedual?.status = statusOptions[row]
+                    savedShows = moveShow(with: show.name, to: row-1, shows: savedShows)
+                    print("new moved: ", savedShows)
+                }
+                else
+                {
+                    show.addSchedual(_schedual: Schedual(_status: statusOptions[row]))
+                    savedShows[row-1].append(show)
+                    print("new added: ", savedShows)
                 }
             }
         }
+        saveShows(showArr: savedShows)
     }
     
-    func saveShows(_ shows:[Show])
-    {
-        //        print("save called")
-        var watchingShows:[Show] = []
-        var backlogShows:[Show] = []
-        var completedShows:[Show] = []
-        var droppedShows:[Show] = []
-        
-        for s in shows
-        {
-            switch s.schedual?.status
-            {
-            case "watching":
-                watchingShows.append(s)
-                break
-            case "backlog":
-                backlogShows.append(s)
-                break
-            case "completed":
-                completedShows.append(s)
-                break
-            case "dropped":
-                droppedShows.append(s)
-                break
-            default:
-                break
-            }
-        }
-        let showsArr = [watchingShows,backlogShows,completedShows,droppedShows]
-        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: showsArr, requiringSecureCoding: false)
-        {
-            defaults.set(savedData, forKey: showKey)
-            //            print("saved")
-        }
-    }
-
+    
     /*
     // MARK: - Navigation
 

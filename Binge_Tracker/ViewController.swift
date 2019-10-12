@@ -14,20 +14,14 @@ class ShowViewController: UIViewController, UICollectionViewDelegate, UICollecti
     @IBOutlet weak var showViewContrller: UICollectionView!
     var selected: Show?
     let headerID = "sectionHeader"
-    let sectionHeaders = ["watching","backlog","completed","dropped"]
+    
+
+    
     
     let defaults = UserDefaults.standard
-    var showsArr: [[Show]] {
-        print("getting shows array")
-        if let savedShows = defaults.object(forKey: showKey) as? Data
-        {
-            if let decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [[Show]]
-            {
-                return decodedShows
-            }
-        }
-        print("none found")
-        return [[],[],[],[]]
+    var showsArr:[[Show]]
+    {
+        return getShows()
     }
     
     

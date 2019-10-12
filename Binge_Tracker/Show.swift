@@ -16,6 +16,8 @@ import UIKit
 //    case dropped
 //}
 
+let sectionHeaders = ["watching","backlog","completed","dropped"]
+
 class Show: NSObject, NSCoding
 {
     var name: String
@@ -71,10 +73,86 @@ class Schedual: NSObject, NSCoding
 
 func saveShows(showArr: [[Show]])
 {
-    
+    let defaults = UserDefaults.standard
+    if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: showArr, requiringSecureCoding: false)
+    {
+        defaults.set(savedData, forKey: showKey)
+        //            print("saved")
+    }
 }
 
 func getShows() -> [[Show]]
 {
-    return [[]]
+//    print("getting shows array")
+    let defaults = UserDefaults.standard
+    if let savedShows = defaults.object(forKey: showKey) as? Data
+    {
+        if let decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [[Show]]
+        {
+            return decodedShows
+        }
+    }
+//    print("none found")
+    return Array(repeating: [], count: sectionHeaders.count)
 }
+
+func getShow(with name:String) -> Show?
+{
+    let defaults = UserDefaults.standard
+    if let savedShows = defaults.object(forKey: showKey) as? Data
+    {
+        if let decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [[Show]]
+        {
+            for (i, sArr) in decodedShows.enumerated()
+            {
+                if let index = sArr.firstIndex(where: {$0.name == name})
+                {
+                    return decodedShows[i][index]
+                }
+            }
+        }
+    }
+    return nil
+}
+
+func removeShow(with name: String, shows:[[Show]]) -> [[Show]]
+{
+    var rShows = shows
+    for (i, sArr) in rShows.enumerated()
+    {
+        if let index = sArr.firstIndex(where: {$0.name == name})
+        {
+            rShows[i].remove(at: index)
+        }
+    }
+    return rShows
+}
+
+func moveShow(with name: String, to index2: Int, shows:[[Show]]) -> [[Show]]
+{
+    var rShows = shows
+    var index1:Int
+    {
+        for (i, sArr) in rShows.enumerated()
+        {
+            if let _ = sArr.firstIndex(where: {$0.name == name})
+            {
+                return i
+            }
+        }
+        return index2
+    }
+    if(index1 == index2) {return shows}
+    if let i = rShows[index1].firstIndex(where: {$0.name == name})
+    {
+        let element = rShows[index1].remove(at: i)
+        element.schedual?.status = sectionHeaders[index2]
+        if !rShows[index2].contains(where: {$0.name == name})
+        {
+            rShows[index2].append(element)
+        }
+    }
+    return rShows
+}
+
+

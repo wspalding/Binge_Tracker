@@ -18,7 +18,7 @@ class addShowViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     @IBOutlet weak var loadingView: UIActivityIndicatorView!
     @IBOutlet weak var statusPickerView: UIPickerView!
     
-    let statusOptions = ["", "backlog", "watching", "completed", "dropped"]
+    let statusOptions = [""] + sectionHeaders
     var show: Show = Show(_name: "N/A", _image: UIImage(named: "image_not_found")!, _info: [:])
     let defaults = UserDefaults.standard
     
@@ -130,77 +130,40 @@ class addShowViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
-        if row != 0
+        var savedShows = getShows()
+        print("original:", savedShows)
+        let currStatus = show.schedual?.status
+//        print(currStatus)
+        let currStatusIndex = statusOptions.firstIndex(of: currStatus ?? "") ?? 0
+        if currStatusIndex != row
         {
-            
-            var found = false
-    
-            let stat = statusOptions[row]
-            print(stat)
-            if let savedShows = defaults.object(forKey: showKey) as? Data
+            print("need to change something, \(currStatusIndex), \(row)")
+            if row <= 0
             {
-                if var decodedShows = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedShows) as? [Show]
-                {
-                    for s in decodedShows
-                    {
-                        if s.name == show.name
-                        {
-                            found = true
-                            s.addSchedual(_schedual: Schedual(_status: stat))
-                        }
-                    }
-                    if !found
-                    {
-                        show.addSchedual(_schedual: Schedual(_status: stat))
-                        decodedShows.append(show)
-                    }
-                    saveShows(decodedShows)
-                }
+                show.schedual = nil
+                savedShows = removeShow(with: show.name, shows: savedShows)
             }
             else
             {
-                show.addSchedual(_schedual: Schedual(_status: stat))
-                saveShows([show])
+                
+                if currStatusIndex > 0
+                {
+                    show.schedual?.status = statusOptions[row]
+                    savedShows = moveShow(with: show.name, to: row-1, shows: savedShows)
+                    print("new moved: ", savedShows)
+                }
+                else
+                {
+                    show.addSchedual(_schedual: Schedual(_status: statusOptions[row]))
+                    savedShows[row-1].append(show)
+                    print("new added: ", savedShows)
+                }
             }
         }
-        
+        saveShows(showArr: savedShows)
     }
     
-    func saveShows(_ shows:[Show])
-    {
-//        print("save called")
-        var watchingShows:[Show] = []
-        var backlogShows:[Show] = []
-        var completedShows:[Show] = []
-        var droppedShows:[Show] = []
-        
-        for s in shows
-        {
-            switch s.schedual?.status
-            {
-            case "watching":
-                watchingShows.append(s)
-                break
-            case "backlog":
-                backlogShows.append(s)
-                break
-            case "completed":
-                completedShows.append(s)
-                break
-            case "dropped":
-                droppedShows.append(s)
-                break
-            default:
-                break
-            }
-        }
-        let showsArr = [watchingShows,backlogShows,completedShows,droppedShows]
-        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: showsArr, requiringSecureCoding: false)
-        {
-            defaults.set(savedData, forKey: showKey)
-//            print("saved")
-        }
-    }
+    
     
     /*
     // MARK: - Navigation

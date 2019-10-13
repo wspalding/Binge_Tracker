@@ -24,6 +24,30 @@ class Show: NSObject, NSCoding
     var image: UIImage
     var info: [String:String]
     var schedual: Schedual?
+    override var description: String
+    {
+        let dateformatter = DateFormatter()
+        dateformatter.dateStyle = DateFormatter.Style.short
+        dateformatter.timeStyle = DateFormatter.Style.none
+        
+        if let s = schedual
+        {
+            switch schedual?.status
+            {
+            case "watching":
+                return "on season \(s.currSeason) episode \(s.currEpisode)"
+            case "backlog":
+                return "starting on \(dateformatter.string(from: s.startDate))"
+            case "completed":
+                return "finished on \(dateformatter.string(from: s.endDate))"
+            case "dropped":
+                return "dropped on season \(s.currSeason) episode \(s.currEpisode)"
+            default:
+                return ""
+            }
+        }
+        return ""
+    }
     
     init(_name:String, _image: UIImage?, _info: [String:String], _schedual:Schedual? = nil)
     {
@@ -56,6 +80,10 @@ class Show: NSObject, NSCoding
 class Schedual: NSObject, NSCoding
 {
     var status: String
+    var currEpisode: Int = 1
+    var currSeason: Int = 1
+    var startDate: Date = Date()
+    var endDate: Date = Date()
     
     init(_status: String)
     {

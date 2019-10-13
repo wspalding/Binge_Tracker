@@ -70,25 +70,52 @@ class addShowViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
                             let dictonary =  try JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]
 //                            print(dictonary)
                             if let plot = dictonary?["Plot"]
-                            { plotString = "\(plot)" }
+                            {
+                                plotString = "\(plot)"
+                                self.show.info["Plot"] = plotString
+                            }
                             
                             if let type = dictonary?["Type"]
-                            { infoString.append("Type: \(type)\n") }
+                            {
+                                infoString.append("Type: \(type)\n")
+                                self.show.info["Type"] = type as? String
+                            }
                             
                             if let genre = dictonary?["Genre"]
-                            { infoString.append("Genre: \(genre)\n") }
+                            {
+                                infoString.append("Genre: \(genre)\n")
+                                self.show.info["Genre"] = genre as? String
+                            }
                             
                             if let release = dictonary?["Released"]
-                            { infoString.append("Release Date: \(release)\n") }
+                            {
+                                infoString.append("Release Date: \(release)\n")
+                                self.show.info["Released"] = release as? String
+                            }
                             
                             if let metaScore = dictonary?["Metascore"]
-                            { infoString.append("Metascore: \(metaScore)\n") }
+                            {
+                                infoString.append("Metascore: \(metaScore)\n")
+                                self.show.info["Metascore"] = metaScore as? String
+                            }
                             
                             if let imdbRating = dictonary?["imdbRating"]
-                            { infoString.append("imdbRating: \(imdbRating)\n") }
+                            {
+                                infoString.append("imdbRating: \(imdbRating)\n")
+                                self.show.info["imdbRating"] = imdbRating as? String
+                            }
                             
                             if let runTime = dictonary?["Runtime"]
-                            { infoString.append("Runtime: \(runTime)\n") }
+                            {
+                                infoString.append("Runtime: \(runTime)\n")
+                                self.show.info["Runtime"] = runTime as? String
+                            }
+                            
+                            if let totalSeasons = dictonary?["totalSeasons"]
+                            {
+                                infoString.append("totalSeasons: \(totalSeasons)\n")
+                                self.show.info["totalSeasons"] = totalSeasons as? String
+                            }
                         }
                         catch let error as NSError
                         {

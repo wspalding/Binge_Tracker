@@ -80,22 +80,34 @@ class Show: NSObject, NSCoding
 class Schedual: NSObject, NSCoding
 {
     var status: String
-    var currEpisode: Int = 1
-    var currSeason: Int = 1
-    var startDate: Date = Date()
-    var endDate: Date = Date()
+    var currEpisode: Int
+    var currSeason: Int
+    var startDate: Date
+    var endDate: Date
     
-    init(_status: String)
+    init(_status: String, _currEpisode: Int = 1, _currSeason: Int = 1, _startDate: Date = Date(), _endDate: Date = Date())
     {
         status = _status
+        currEpisode = _currEpisode
+        currSeason = _currSeason
+        startDate = _startDate
+        endDate = _endDate
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(status, forKey: "statusKey")
+        aCoder.encode(currEpisode, forKey: "currEpisodeKey")
+        aCoder.encode(currSeason, forKey: "currSeasonKey")
+        aCoder.encode(startDate, forKey: "startDateKey")
+        aCoder.encode(endDate, forKey: "endDateKey")
     }
     
     required init?(coder aDecoder: NSCoder) {
         status = aDecoder.decodeObject(forKey: "statusKey") as? String ?? ""
+        currEpisode = aDecoder.decodeObject(forKey: "currEpisodeKey") as? Int ?? 1
+        currSeason = aDecoder.decodeObject(forKey: "currSeasonKey") as? Int ?? 1
+        startDate = aDecoder.decodeObject(forKey: "startDateKey") as? Date ?? Date()
+        endDate = aDecoder.decodeObject(forKey: "endDateKey") as? Date ?? Date()
     }
 }
 

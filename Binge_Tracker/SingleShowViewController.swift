@@ -60,13 +60,15 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
         seasonInfoStepper.minimumValue = 0
         episodeInfoStepper.minimumValue = 0
         
-        loadStatusInfoViews()
+        schedualInfoDatePickerView.addTarget(self, action: #selector(datePickerChanged(_:)), for: .valueChanged)
         
+        loadStatusInfoViews()
     }
     
     @IBAction func datePickerChanged(_ sender: Any)
     {
-        print("getting called")
+        let newDate = schedualInfoDatePickerView.date
+        print("getting called \(schedualInfoDatePickerView.date)")
         let savedShows = getShows()
         let savedShow = getShow(with: show.name)
         if let s = savedShow?.schedual
@@ -76,12 +78,12 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
             case "watching":
                 break
             case "backlog":
-                s.startDate = schedualInfoDatePickerView.date
-                print("getting called")
+                savedShow?.schedual!.startDate = newDate
+                print("changing startdate to \(String(describing: savedShow?.schedual!.startDate))")
                 break
             case "completed":
-                s.endDate = schedualInfoDatePickerView.date
-                print("getting called")
+                savedShow?.schedual!.endDate = newDate
+                print("changing enddate to \(String(describing: savedShow?.schedual!.endDate))")
                 break
             case "dropped":
                 break

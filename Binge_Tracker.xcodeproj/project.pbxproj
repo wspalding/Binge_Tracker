@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D331B572345D14900EA601B /* secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D331B562345D14900EA601B /* secrets.swift */; };
 		3D331B5923466BF000EA601B /* AddShowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D331B5823466BF000EA601B /* AddShowViewController.swift */; };
 		3D6FA342233B319D005640BE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FA341233B319D005640BE /* AppDelegate.swift */; };
 		3D6FA344233B319D005640BE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FA343233B319D005640BE /* ViewController.swift */; };
@@ -23,6 +22,7 @@
 		3D6FA37F233C8549005640BE /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FA37E233C8549005640BE /* SearchResultTableViewCell.swift */; };
 		3DAECB59234A5A13005ACC23 /* SingleShowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAECB58234A5A13005ACC23 /* SingleShowViewController.swift */; };
 		3DBE3743234FC41C0067C625 /* SectionCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBE3742234FC41C0067C625 /* SectionCollectionReusableView.swift */; };
+		BEB11B3C2354503E00CE91BC /* secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB11B3B2354503E00CE91BC /* secrets.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,7 +43,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3D331B562345D14900EA601B /* secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = secrets.swift; sourceTree = "<group>"; };
 		3D331B5823466BF000EA601B /* AddShowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddShowViewController.swift; sourceTree = "<group>"; };
 		3D6FA33E233B319D005640BE /* Binge_Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Binge_Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D6FA341233B319D005640BE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -65,6 +64,7 @@
 		3D6FA37E233C8549005640BE /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		3DAECB58234A5A13005ACC23 /* SingleShowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleShowViewController.swift; sourceTree = "<group>"; };
 		3DBE3742234FC41C0067C625 /* SectionCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCollectionReusableView.swift; sourceTree = "<group>"; };
+		BEB11B3B2354503E00CE91BC /* secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = secrets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,8 +124,8 @@
 				3D6FA345233B319D005640BE /* Main.storyboard */,
 				3D331B5823466BF000EA601B /* AddShowViewController.swift */,
 				3D6FA37E233C8549005640BE /* SearchResultTableViewCell.swift */,
+				BEB11B3B2354503E00CE91BC /* secrets.swift */,
 				3D6FA37C233C1830005640BE /* AddViewController.swift */,
-				3D331B562345D14900EA601B /* secrets.swift */,
 				3D6FA34B233B319F005640BE /* Assets.xcassets */,
 				3D6FA34D233B319F005640BE /* LaunchScreen.storyboard */,
 				3D6FA350233B319F005640BE /* Info.plist */,
@@ -285,12 +285,12 @@
 			files = (
 				3DBE3743234FC41C0067C625 /* SectionCollectionReusableView.swift in Sources */,
 				3D6FA37F233C8549005640BE /* SearchResultTableViewCell.swift in Sources */,
-				3D331B572345D14900EA601B /* secrets.swift in Sources */,
 				3D331B5923466BF000EA601B /* AddShowViewController.swift in Sources */,
 				3DAECB59234A5A13005ACC23 /* SingleShowViewController.swift in Sources */,
 				3D6FA344233B319D005640BE /* ViewController.swift in Sources */,
 				3D6FA34A233B319D005640BE /* Binge_Tracker.xcdatamodeld in Sources */,
 				3D6FA37D233C1830005640BE /* AddViewController.swift in Sources */,
+				BEB11B3C2354503E00CE91BC /* secrets.swift in Sources */,
 				3D6FA379233B433B005640BE /* Show.swift in Sources */,
 				3D6FA342233B319D005640BE /* AppDelegate.swift in Sources */,
 				3D6FA37B233C06BA005640BE /* ShowCollectionViewCell.swift in Sources */,

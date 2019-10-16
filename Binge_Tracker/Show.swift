@@ -36,12 +36,26 @@ class Show: NSObject, NSCoding
             switch schedual?.status
             {
             case "watching":
+                if let type = info["Type"]
+                {
+                    if type == "movie"
+                    {
+                        return "watched \(s.timesWatched) times"
+                    }
+                }
                 return "on season \(s.currSeason) episode \(s.currEpisode)"
             case "backlog":
                 return "starting on \(dateformatter.string(from: s.startDate))"
             case "completed":
                 return "finished on \(dateformatter.string(from: s.endDate))"
             case "dropped":
+                if let type = info["Type"]
+                {
+                    if type == "Movie"
+                    {
+                        return "watched \(s.timesWatched) times"
+                    }
+                }
                 return "dropped on season \(s.currSeason) episode \(s.currEpisode)"
             default:
                 return ""
@@ -83,14 +97,16 @@ class Show: NSObject, NSCoding
 class Schedual: NSObject, NSCoding
 {
     var status: String
+    var timesWatched: Int
     var currEpisode: Int
     var currSeason: Int
     var startDate: Date
     var endDate: Date
     
-    init(_status: String, _currEpisode: Int = 1, _currSeason: Int = 1, _startDate: Date = Date(), _endDate: Date = Date())
+    init(_status: String, _timesWatched: Int = 0, _currEpisode: Int = 1, _currSeason: Int = 1, _startDate: Date = Date(), _endDate: Date = Date())
     {
         status = _status
+        timesWatched = _timesWatched
         currEpisode = _currEpisode
         currSeason = _currSeason
         startDate = _startDate
@@ -99,6 +115,7 @@ class Schedual: NSObject, NSCoding
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(status, forKey: "statusKey")
+        aCoder.encode(timesWatched, forKey: "timesWatchedKey")
         aCoder.encode(currEpisode, forKey: "currEpisodeKey")
         aCoder.encode(currSeason, forKey: "currSeasonKey")
         aCoder.encode(startDate, forKey: "startDateKey")
@@ -107,8 +124,9 @@ class Schedual: NSObject, NSCoding
     
     required init?(coder aDecoder: NSCoder) {
         status = aDecoder.decodeObject(forKey: "statusKey") as? String ?? ""
-        currEpisode = aDecoder.decodeObject(forKey: "currEpisodeKey") as? Int ?? 1
-        currSeason = aDecoder.decodeObject(forKey: "currSeasonKey") as? Int ?? 1
+        timesWatched = aDecoder.decodeInteger(forKey: "timesWatchedKey")
+        currEpisode = aDecoder.decodeInteger(forKey: "currEpisodeKey")
+        currSeason = aDecoder.decodeInteger(forKey: "currSeasonKey")
         startDate = aDecoder.decodeObject(forKey: "startDateKey") as? Date ?? Date()
         endDate = aDecoder.decodeObject(forKey: "endDateKey") as? Date ?? Date()
     }

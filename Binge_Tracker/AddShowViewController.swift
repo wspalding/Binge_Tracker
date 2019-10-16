@@ -10,19 +10,30 @@ import UIKit
 
 class addShowViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
 {
-    
+    //MARK: variables
     @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var posterImage: UIImageView!
     @IBOutlet weak var showInfoLabel: UILabel!
     @IBOutlet weak var showPlotLabel: UILabel!
     @IBOutlet weak var loadingView: UIActivityIndicatorView!
     @IBOutlet weak var statusPickerView: UIPickerView!
+    @IBOutlet weak var schedualInfoLabel: UILabel!
+    @IBOutlet weak var timesWatchedInfoLabel: UILabel!
+    @IBOutlet weak var timesWatchedInfoStepper: UIStepper!
+    @IBOutlet weak var seasonInfoLabel: UILabel!
+    @IBOutlet weak var seasonInfoStepper: UIStepper!
+    @IBOutlet weak var episodeInfoLabel: UILabel!
+    @IBOutlet weak var episodeInfoStepper: UIStepper!
+    @IBOutlet weak var schedualInfoDatePickerView: UIDatePicker!
     
     let statusOptions = [""] + sectionHeaders
     var show: Show = Show(_name: "N/A", _image: UIImage(named: "image_not_found")!, _info: [:])
     let defaults = UserDefaults.standard
     
-    override func viewDidLoad() {
+    
+    //MARK: ViewDidLoad
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
@@ -115,6 +126,8 @@ class addShowViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
                             {
                                 infoString.append("totalSeasons: \(totalSeasons)\n")
                                 self.show.info["totalSeasons"] = totalSeasons as? String
+//                                self.seasonInfoStepper.maximumValue = totalSeasons as! Double
+
                             }
                         }
                         catch let error as NSError
@@ -139,8 +152,108 @@ class addShowViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             dataTask.resume()
         }
         showInfoLabel.text = infoString
+        
+        let currStatus = statusOptions.firstIndex(of: show.schedual?.status ?? "") ?? 0
+        statusPickerView.selectRow(currStatus, inComponent: 0, animated: false)
+        schedualInfoDatePickerView.datePickerMode = .date
+        
+        seasonInfoStepper.minimumValue = 1
+        episodeInfoStepper.minimumValue = 1
+                
+        schedualInfoDatePickerView.addTarget(self, action: #selector(datePickerChanged(_:)), for: .valueChanged)
+        
+        loadStatusInfoViews()
+    }
+
+    //MARK: IBActions
+    @IBAction func episodeStepperChanged(_ sender: UIStepper)
+    {
+        print("episode changed")
+        let newValue = Int(sender.value)
+        let savedShows = getShows()
+        for (i, element) in savedShows.enumerated()
+        {
+            if let j = element.firstIndex(where: {$0.name == show.name})
+            {
+                savedShows[i][j].schedual!.currEpisode = newValue
+                show.schedual?.currEpisode = newValue
+                print("new value: \(newValue)")
+            }
+        }
+        episodeInfoLabel.text = "episode \(newValue)"
+        saveShows(showArr: savedShows)
     }
     
+    @IBAction func seasonStepperChanged(_ sender: UIStepper)
+    {
+        print("season changed")
+        let newValue = Int(sender.value)
+        let savedShows = getShows()
+        for (i, element) in savedShows.enumerated()
+        {
+            if let j = element.firstIndex(where: {$0.name == show.name})
+            {
+                savedShows[i][j].schedual!.currSeason = newValue
+                show.schedual?.currSeason = newValue
+                print("new value: \(newValue)")
+            }
+        }
+        seasonInfoLabel.text = "season \(newValue)"
+        saveShows(showArr: savedShows)
+    }
+    
+    @IBAction func timesWatchedStepperChanged(_ sender: UIStepper)
+    {
+        print("times watched changed")
+        let newValue = Int(sender.value)
+        let savedShows = getShows()
+        for (i, element) in savedShows.enumerated()
+        {
+            if let j = element.firstIndex(where: {$0.name == show.name})
+            {
+                savedShows[i][j].schedual!.timesWatched = newValue
+                show.schedual?.timesWatched = newValue
+                print("new value: \(newValue)")
+            }
+        }
+        timesWatchedInfoLabel.text = "watched \(newValue) times"
+        saveShows(showArr: savedShows)
+    }
+    
+    @IBAction func datePickerChanged(_ sender: Any)
+    {
+        let newDate = schedualInfoDatePickerView.date
+//        print("getting called \(schedualInfoDatePickerView.date)")
+        let savedShows = getShows()
+        for (i, element) in savedShows.enumerated()
+        {
+            if let j = element.firstIndex(where: {$0.name == show.name})
+            {
+                switch savedShows[i][j].schedual?.status
+                {
+                case "watching":
+                    break
+                case "backlog":
+                    savedShows[i][j].schedual!.startDate = newDate
+                    print("changing startdate to \( savedShows[i][j].schedual!.startDate)")
+                    break
+                case "completed":
+                    savedShows[i][j].schedual!.endDate = newDate
+                    print("changing enddate to \( savedShows[i][j].schedual!.endDate)")
+                    break
+                case "dropped":
+                    break
+                default:
+                    break
+                }
+            }
+        }
+        saveShows(showArr: savedShows)
+    }
+    
+    
+    
+    //MARK: UIPickerView
     func numberOfComponents(in pickerView: UIPickerView) -> Int
     {
         return 1
@@ -188,18 +301,136 @@ class addShowViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             }
         }
         saveShows(showArr: savedShows)
+        loadStatusInfoViews()
     }
     
     
-    
-    /*
-    // MARK: - Navigation
+    //MARK: display correct views
+    func loadStatusInfoViews()
+    {
+        let currStatus = statusOptions.firstIndex(of: show.schedual?.status ?? "") ?? 0
+        switch currStatus
+        {
+        case 0: //MARK: remove
+            schedualInfoLabel.isHidden = true
+            schedualInfoDatePickerView.isHidden = true
+            
+            timesWatchedInfoLabel.isHidden = true
+            timesWatchedInfoStepper.isHidden = true
+            
+            seasonInfoLabel.isHidden = true
+            seasonInfoStepper.isHidden = true
+            
+            episodeInfoLabel.isHidden = true
+            episodeInfoStepper.isHidden = true
+            break
+        case 1: //MARK: watching
+            schedualInfoLabel.isHidden = false
+            schedualInfoLabel.text = "current episode"
+            schedualInfoDatePickerView.isHidden = true
+            
+            timesWatchedInfoLabel.isHidden = false
+            timesWatchedInfoLabel.text = "watched \(show.schedual?.timesWatched ?? -1) times"
+            timesWatchedInfoStepper.isHidden = false
+            timesWatchedInfoStepper.value = Double(show.schedual?.timesWatched ?? -1)
+            
+            if show.info["Type"] != "movie"
+            {
+                seasonInfoLabel.isHidden = false
+                seasonInfoLabel.text = "season \(show.schedual?.currSeason ?? -1)"
+                seasonInfoStepper.isHidden = false
+                seasonInfoStepper.value = Double(show.schedual?.currSeason ?? -1)
+                
+                episodeInfoLabel.isHidden = false
+                episodeInfoLabel.text = "episode \(show.schedual?.currEpisode ?? -1)"
+                episodeInfoStepper.isHidden = false
+                episodeInfoStepper.value = Double(show.schedual?.currEpisode ?? -1)
+            }
+            else
+            {
+                seasonInfoLabel.isHidden = true
+                seasonInfoStepper.isHidden = true
+                
+                episodeInfoLabel.isHidden = true
+                episodeInfoStepper.isHidden = true
+            }
+            break
+        case 2: //MARK: backlog
+            schedualInfoLabel.isHidden = false
+            schedualInfoLabel.text = "start on"
+            schedualInfoDatePickerView.isHidden = false
+            schedualInfoDatePickerView.setDate(show.schedual?.startDate ?? Date(), animated: true)
+            
+            timesWatchedInfoLabel.isHidden = true
+            timesWatchedInfoStepper.isHidden = true
+            
+            seasonInfoLabel.isHidden = true
+            seasonInfoStepper.isHidden = true
+            
+            episodeInfoLabel.isHidden = true
+            episodeInfoStepper.isHidden = true
+            break
+        case 3: //MARK completed
+            schedualInfoLabel.isHidden = false
+            schedualInfoLabel.text = "completed on"
+            schedualInfoDatePickerView.isHidden = false
+            schedualInfoDatePickerView.setDate(show.schedual?.endDate ?? Date(), animated: true)
+            
+            timesWatchedInfoLabel.isHidden = true
+            timesWatchedInfoStepper.isHidden = true
+            
+            seasonInfoLabel.isHidden = true
+            seasonInfoStepper.isHidden = true
+            
+            episodeInfoLabel.isHidden = true
+            episodeInfoStepper.isHidden = true
+            break
+        case 4: //MARK: dropped
+            schedualInfoLabel.isHidden = false
+            schedualInfoLabel.text = "dropped on episode"
+            schedualInfoDatePickerView.isHidden = true
+            
+            timesWatchedInfoLabel.isHidden = false
+            timesWatchedInfoLabel.text = "watched \(show.schedual?.timesWatched ?? 0) times"
+            timesWatchedInfoStepper.isHidden = false
+            timesWatchedInfoStepper.value = Double(show.schedual?.timesWatched ?? -1)
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+            if show.info["Type"] != "movie"
+            {
+                seasonInfoLabel.isHidden = false
+                seasonInfoLabel.text = "season \(show.schedual?.currSeason ?? -1)"
+                seasonInfoStepper.isHidden = false
+                seasonInfoStepper.value = Double(show.schedual?.currSeason ?? -1)
+                
+                episodeInfoLabel.isHidden = false
+                episodeInfoLabel.text = "episode \(show.schedual?.currEpisode ?? -1)"
+                episodeInfoStepper.isHidden = false
+                episodeInfoStepper.value = Double(show.schedual?.currEpisode ?? -1)
+            }
+            else
+            {
+                seasonInfoLabel.isHidden = true
+                seasonInfoStepper.isHidden = true
+                
+                episodeInfoLabel.isHidden = true
+                episodeInfoStepper.isHidden = true
+            }
+
+            break
+        default://MARK: default
+            schedualInfoLabel.isHidden = true
+            schedualInfoDatePickerView.isHidden = true
+            
+            timesWatchedInfoLabel.isHidden = true
+            timesWatchedInfoStepper.isHidden = true
+            
+            seasonInfoLabel.isHidden = true
+            seasonInfoStepper.isHidden = true
+            
+            episodeInfoLabel.isHidden = true
+            episodeInfoStepper.isHidden = true
+        }
+
     }
-    */
 
 }

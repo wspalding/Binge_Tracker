@@ -60,7 +60,7 @@ class ShowViewController: UIViewController, UICollectionViewDelegate, UICollecti
         cell.showTitleLabel.text = showsArr[indexPath.section][indexPath.item].name
         cell.showImageView.image = showsArr[indexPath.section][indexPath.item].image
         cell.statusLabel.text = showsArr[indexPath.section][indexPath.item].description
-        print(cell.statusLabel.text)
+//        print(cell.statusLabel.text)
         return cell
     }
     

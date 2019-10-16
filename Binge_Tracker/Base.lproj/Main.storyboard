@@ -145,17 +145,85 @@
                                     <outlet property="delegate" destination="QQZ-0m-zeu" id="XPN-EW-LeT"/>
                                 </connections>
                             </pickerView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1BU-ip-eWR">
+                                <rect key="frame" x="20" y="588" width="374" height="41"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="AMG-1S-RwW">
+                                <rect key="frame" x="0.0" y="637" width="414" height="176"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="datePickerChanged:" destination="S9y-0A-LxB" eventType="valueChanged" id="Tuw-gX-yp5"/>
+                                    <action selector="datePickerChanged:" destination="QQZ-0m-zeu" eventType="valueChanged" id="jtb-3K-9jU"/>
+                                </connections>
+                            </datePicker>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="watched n times" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5KI-8T-Exv">
+                                <rect key="frame" x="20" y="637" width="272" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="season" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kZl-fi-nD4">
+                                <rect key="frame" x="20" y="666" width="272" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="mFc-f6-tQv">
+                                <rect key="frame" x="300" y="666" width="94" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="seasonStepperChanged:" destination="S9y-0A-LxB" eventType="valueChanged" id="NT1-oa-Cjk"/>
+                                    <action selector="seasonStepperChanged:" destination="QQZ-0m-zeu" eventType="valueChanged" id="gq3-v9-mkY"/>
+                                </connections>
+                            </stepper>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="ex5-y0-mmC">
+                                <rect key="frame" x="300" y="703" width="94" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="episodeStepperChanged:" destination="S9y-0A-LxB" eventType="valueChanged" id="TUu-4w-deg"/>
+                                    <action selector="episodeStepperChanged:" destination="QQZ-0m-zeu" eventType="valueChanged" id="aBo-th-UYI"/>
+                                </connections>
+                            </stepper>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="episode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2VD-Rz-Q8k">
+                                <rect key="frame" x="20" y="703" width="272" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="nyc-S0-Ii3">
+                                <rect key="frame" x="300" y="626" width="94" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="timesWatchedStepperChanged:" destination="S9y-0A-LxB" eventType="valueChanged" id="IY7-7D-YWi"/>
+                                    <action selector="timesWatchedStepperChanged:" destination="QQZ-0m-zeu" eventType="valueChanged" id="Suc-vZ-vze"/>
+                                </connections>
+                            </stepper>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="ChO-Ko-GlU"/>
                     </view>
                     <connections>
+                        <outlet property="episodeInfoLabel" destination="2VD-Rz-Q8k" id="jcG-K8-Dn7"/>
+                        <outlet property="episodeInfoStepper" destination="ex5-y0-mmC" id="jNM-eO-amT"/>
                         <outlet property="loadingView" destination="9nb-86-wYN" id="BXI-b3-3RK"/>
                         <outlet property="posterImage" destination="13J-ij-Wbw" id="QdG-LA-RKh"/>
+                        <outlet property="schedualInfoDatePickerView" destination="AMG-1S-RwW" id="tFU-u9-IlF"/>
+                        <outlet property="schedualInfoLabel" destination="1BU-ip-eWR" id="yDA-f6-GBh"/>
+                        <outlet property="seasonInfoLabel" destination="kZl-fi-nD4" id="ceH-a0-bHT"/>
+                        <outlet property="seasonInfoStepper" destination="mFc-f6-tQv" id="ugg-8T-6pD"/>
                         <outlet property="showInfoLabel" destination="jnE-cr-Edt" id="j43-s1-FEi"/>
                         <outlet property="showPlotLabel" destination="sE9-RY-02Q" id="H7f-NA-OBr"/>
                         <outlet property="showTitleLabel" destination="Sat-99-qih" id="WxO-K0-Pn4"/>
                         <outlet property="statusPickerView" destination="q7v-d1-QdK" id="sTg-7i-AuQ"/>
+                        <outlet property="timesWatchedInfoLabel" destination="5KI-8T-Exv" id="V2U-Ts-o2m"/>
+                        <outlet property="timesWatchedInfoStepper" destination="nyc-S0-Ii3" id="po5-8E-nsb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rnK-Qg-NAa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -306,34 +374,48 @@
                                     <action selector="datePickerChanged:" destination="S9y-0A-LxB" eventType="valueChanged" id="5Qu-6k-sON"/>
                                 </connections>
                             </datePicker>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="watched n times" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xr8-3S-1p9">
+                                <rect key="frame" x="20" y="637" width="272" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="season" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iKm-Je-EC1">
-                                <rect key="frame" x="20" y="637" width="272" height="29"/>
+                                <rect key="frame" x="20" y="666" width="272" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="cNW-HE-ysm">
-                                <rect key="frame" x="300" y="637" width="94" height="29"/>
+                                <rect key="frame" x="300" y="666" width="94" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <connections>
                                     <action selector="seasonStepperChanged:" destination="S9y-0A-LxB" eventType="valueChanged" id="ldz-Mc-LrB"/>
                                 </connections>
                             </stepper>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="nyS-KF-I2c">
-                                <rect key="frame" x="300" y="674" width="94" height="29"/>
+                                <rect key="frame" x="300" y="703" width="94" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <connections>
                                     <action selector="episodeStepperChanged:" destination="S9y-0A-LxB" eventType="valueChanged" id="Hr9-nA-f1J"/>
                                 </connections>
                             </stepper>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="episode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K00-0X-KJ8">
-                                <rect key="frame" x="20" y="674" width="272" height="29"/>
+                                <rect key="frame" x="20" y="703" width="272" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="alf-CR-G2O">
+                                <rect key="frame" x="300" y="626" width="94" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="timesWatchedStepperChanged:" destination="S9y-0A-LxB" eventType="valueChanged" id="a0a-E5-l2P"/>
+                                </connections>
+                            </stepper>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="MeS-zL-Gt9"/>
@@ -349,6 +431,8 @@
                         <outlet property="seasonInfoLabel" destination="iKm-Je-EC1" id="yCu-pN-rrS"/>
                         <outlet property="seasonInfoStepper" destination="cNW-HE-ysm" id="5wD-UJ-sNH"/>
                         <outlet property="statusPickerView" destination="1pX-UD-tnP" id="HBT-e7-t2W"/>
+                        <outlet property="timesWatchedInfoLabel" destination="Xr8-3S-1p9" id="X58-T1-D14"/>
+                        <outlet property="timesWatchedInfoStepper" destination="alf-CR-G2O" id="fB0-vH-6Rh"/>
                         <outlet property="titleLabel" destination="KKT-gM-MHm" id="Ivk-uv-YtK"/>
                     </connections>
                 </viewController>

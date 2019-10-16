@@ -18,6 +18,8 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
     @IBOutlet weak var plotLabel: UILabel!
     @IBOutlet weak var statusPickerView: UIPickerView!
     @IBOutlet weak var schedualInfoLabel: UILabel!
+    @IBOutlet weak var timesWatchedInfoLabel: UILabel!
+    @IBOutlet weak var timesWatchedInfoStepper: UIStepper!
     @IBOutlet weak var seasonInfoLabel: UILabel!
     @IBOutlet weak var seasonInfoStepper: UIStepper!
     @IBOutlet weak var episodeInfoLabel: UILabel!
@@ -62,7 +64,7 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
         
         seasonInfoStepper.minimumValue = 1
         episodeInfoStepper.minimumValue = 1
-        
+                
         schedualInfoDatePickerView.addTarget(self, action: #selector(datePickerChanged(_:)), for: .valueChanged)
                 
         loadStatusInfoViews()
@@ -103,6 +105,24 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
             }
         }
         seasonInfoLabel.text = "season \(newValue)"
+        saveShows(showArr: savedShows)
+    }
+    
+    @IBAction func timesWatchedStepperChanged(_ sender: UIStepper)
+    {
+        print("times watched changed")
+        let newValue = Int(sender.value)
+        let savedShows = getShows()
+        for (i, element) in savedShows.enumerated()
+        {
+            if let j = element.firstIndex(where: {$0.name == show.name})
+            {
+                savedShows[i][j].schedual!.timesWatched = newValue
+                show.schedual?.timesWatched = newValue
+                print("new value: \(newValue)")
+            }
+        }
+        timesWatchedInfoLabel.text = "watched \(newValue) times"
         saveShows(showArr: savedShows)
     }
     
@@ -194,9 +214,12 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
         let currStatus = statusOptions.firstIndex(of: show.schedual?.status ?? "") ?? 0
         switch currStatus
         {
-        case 0: //remove
+        case 0: //MARK: remove
             schedualInfoLabel.isHidden = true
             schedualInfoDatePickerView.isHidden = true
+            
+            timesWatchedInfoLabel.isHidden = true
+            timesWatchedInfoStepper.isHidden = true
             
             seasonInfoLabel.isHidden = true
             seasonInfoStepper.isHidden = true
@@ -204,65 +227,105 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
             episodeInfoLabel.isHidden = true
             episodeInfoStepper.isHidden = true
             break
-        case 1: //watching
+        case 1: //MARK: watching
             schedualInfoLabel.isHidden = false
             schedualInfoLabel.text = "current episode"
             schedualInfoDatePickerView.isHidden = true
             
-            seasonInfoLabel.isHidden = false
-            seasonInfoLabel.text = "season \(show.schedual?.currSeason ?? -1)"
-            seasonInfoStepper.isHidden = false
-            seasonInfoStepper.value = Double(show.schedual?.currSeason ?? -1)
+            timesWatchedInfoLabel.isHidden = false
+            timesWatchedInfoLabel.text = "watched \(show.schedual?.timesWatched ?? -1) times"
+            timesWatchedInfoStepper.isHidden = false
+            timesWatchedInfoStepper.value = Double(show.schedual?.timesWatched ?? -1)
             
-            episodeInfoLabel.isHidden = false
-            episodeInfoLabel.text = "episode \(show.schedual?.currEpisode ?? -1)"
-            episodeInfoStepper.isHidden = false
-            episodeInfoStepper.value = Double(show.schedual?.currEpisode ?? -1)
+            if show.info["Type"] != "movie"
+            {
+                seasonInfoLabel.isHidden = false
+                seasonInfoLabel.text = "season \(show.schedual?.currSeason ?? -1)"
+                seasonInfoStepper.isHidden = false
+                seasonInfoStepper.value = Double(show.schedual?.currSeason ?? -1)
+                
+                episodeInfoLabel.isHidden = false
+                episodeInfoLabel.text = "episode \(show.schedual?.currEpisode ?? -1)"
+                episodeInfoStepper.isHidden = false
+                episodeInfoStepper.value = Double(show.schedual?.currEpisode ?? -1)
+            }
+            else
+            {
+                seasonInfoLabel.isHidden = true
+                seasonInfoStepper.isHidden = true
+                
+                episodeInfoLabel.isHidden = true
+                episodeInfoStepper.isHidden = true
+            }
             break
-        case 2: //backlog
+        case 2: //MARK: backlog
             schedualInfoLabel.isHidden = false
             schedualInfoLabel.text = "start on"
             schedualInfoDatePickerView.isHidden = false
             schedualInfoDatePickerView.setDate(show.schedual?.startDate ?? Date(), animated: true)
             
+            timesWatchedInfoLabel.isHidden = true
+            timesWatchedInfoStepper.isHidden = true
+            
             seasonInfoLabel.isHidden = true
             seasonInfoStepper.isHidden = true
             
             episodeInfoLabel.isHidden = true
             episodeInfoStepper.isHidden = true
             break
-        case 3: //completed
+        case 3: //MARK completed
             schedualInfoLabel.isHidden = false
             schedualInfoLabel.text = "completed on"
             schedualInfoDatePickerView.isHidden = false
             schedualInfoDatePickerView.setDate(show.schedual?.endDate ?? Date(), animated: true)
             
+            timesWatchedInfoLabel.isHidden = true
+            timesWatchedInfoStepper.isHidden = true
+            
             seasonInfoLabel.isHidden = true
             seasonInfoStepper.isHidden = true
             
             episodeInfoLabel.isHidden = true
             episodeInfoStepper.isHidden = true
             break
-        case 4: //dropped
+        case 4: //MARK: dropped
             schedualInfoLabel.isHidden = false
             schedualInfoLabel.text = "dropped on episode"
             schedualInfoDatePickerView.isHidden = true
             
-            seasonInfoLabel.isHidden = false
-            seasonInfoLabel.text = "season \(show.schedual?.currEpisode ?? -1)"
-            seasonInfoStepper.isHidden = false
-            seasonInfoStepper.value = Double(show.schedual?.currSeason ?? -1)
+            timesWatchedInfoLabel.isHidden = false
+            timesWatchedInfoLabel.text = "watched \(show.schedual?.timesWatched ?? 0) times"
+            timesWatchedInfoStepper.isHidden = false
+            timesWatchedInfoStepper.value = Double(show.schedual?.timesWatched ?? -1)
 
-            
-            episodeInfoLabel.isHidden = false
-            episodeInfoLabel.text = "episode \(show.schedual?.currEpisode ?? -1)"
-            episodeInfoStepper.isHidden = false
-            episodeInfoStepper.value = Double(show.schedual?.currEpisode ?? -1)
+            if show.info["Type"] != "movie"
+            {
+                seasonInfoLabel.isHidden = false
+                seasonInfoLabel.text = "season \(show.schedual?.currSeason ?? -1)"
+                seasonInfoStepper.isHidden = false
+                seasonInfoStepper.value = Double(show.schedual?.currSeason ?? -1)
+                
+                episodeInfoLabel.isHidden = false
+                episodeInfoLabel.text = "episode \(show.schedual?.currEpisode ?? -1)"
+                episodeInfoStepper.isHidden = false
+                episodeInfoStepper.value = Double(show.schedual?.currEpisode ?? -1)
+            }
+            else
+            {
+                seasonInfoLabel.isHidden = true
+                seasonInfoStepper.isHidden = true
+                
+                episodeInfoLabel.isHidden = true
+                episodeInfoStepper.isHidden = true
+            }
 
             break
-        default:
+        default://MARK: default
             schedualInfoLabel.isHidden = true
             schedualInfoDatePickerView.isHidden = true
+            
+            timesWatchedInfoLabel.isHidden = true
+            timesWatchedInfoStepper.isHidden = true
             
             seasonInfoLabel.isHidden = true
             seasonInfoStepper.isHidden = true

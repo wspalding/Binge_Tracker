@@ -18,6 +18,7 @@ import UIKit
 
 let sectionHeaders = ["watching","backlog","completed","dropped"]
 
+//MARK: Show
 class Show: NSObject, NSCoding
 {
     var name: String
@@ -77,6 +78,8 @@ class Show: NSObject, NSCoding
     }
 }
 
+
+//MARK: Schedual
 class Schedual: NSObject, NSCoding
 {
     var status: String
@@ -111,6 +114,7 @@ class Schedual: NSObject, NSCoding
     }
 }
 
+//MARK: Functions
 func saveShows(showArr: [[Show]])
 {
     let defaults = UserDefaults.standard
@@ -194,5 +198,4 @@ func moveShow(with name: String, to index2: Int, shows:[[Show]]) -> [[Show]]
     }
     return rShows
 }
-
 

@@ -11,6 +11,7 @@ import UIKit
 class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
 {
     
+    //MARK: variables
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var posterImage: UIImageView!
     @IBOutlet weak var infoLabel: UILabel!
@@ -30,6 +31,8 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
     var seasonString = "season: "
     let episodeString = "episode: "
 
+    
+    //MARK: ViewDidLoad
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -57,44 +60,84 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
         statusPickerView.selectRow(currStatus, inComponent: 0, animated: false)
         schedualInfoDatePickerView.datePickerMode = .date
         
-        seasonInfoStepper.minimumValue = 0
-        episodeInfoStepper.minimumValue = 0
+        seasonInfoStepper.minimumValue = 1
+        episodeInfoStepper.minimumValue = 1
         
         schedualInfoDatePickerView.addTarget(self, action: #selector(datePickerChanged(_:)), for: .valueChanged)
-        
+                
         loadStatusInfoViews()
+    }
+    
+    
+    //MARK: IBActions
+    @IBAction func episodeStepperChanged(_ sender: UIStepper)
+    {
+        print("episode changed")
+        let newValue = Int(sender.value)
+        let savedShows = getShows()
+        for (i, element) in savedShows.enumerated()
+        {
+            if let j = element.firstIndex(where: {$0.name == show.name})
+            {
+                savedShows[i][j].schedual!.currEpisode = newValue
+                show.schedual?.currEpisode = newValue
+                print("new value: \(newValue)")
+            }
+        }
+        episodeInfoLabel.text = "episode \(newValue)"
+        saveShows(showArr: savedShows)
+    }
+    
+    @IBAction func seasonStepperChanged(_ sender: UIStepper)
+    {
+        print("season changed")
+        let newValue = Int(sender.value)
+        let savedShows = getShows()
+        for (i, element) in savedShows.enumerated()
+        {
+            if let j = element.firstIndex(where: {$0.name == show.name})
+            {
+                savedShows[i][j].schedual!.currSeason = newValue
+                show.schedual?.currSeason = newValue
+                print("new value: \(newValue)")
+            }
+        }
+        seasonInfoLabel.text = "season \(newValue)"
+        saveShows(showArr: savedShows)
     }
     
     @IBAction func datePickerChanged(_ sender: Any)
     {
         let newDate = schedualInfoDatePickerView.date
-        print("getting called \(schedualInfoDatePickerView.date)")
+//        print("getting called \(schedualInfoDatePickerView.date)")
         let savedShows = getShows()
-        let savedShow = getShow(with: show.name)
-        if let s = savedShow?.schedual
+        for (i, element) in savedShows.enumerated()
         {
-            switch s.status
+            if let j = element.firstIndex(where: {$0.name == show.name})
             {
-            case "watching":
-                break
-            case "backlog":
-                savedShow?.schedual!.startDate = newDate
-                print("changing startdate to \(String(describing: savedShow?.schedual!.startDate))")
-                break
-            case "completed":
-                savedShow?.schedual!.endDate = newDate
-                print("changing enddate to \(String(describing: savedShow?.schedual!.endDate))")
-                break
-            case "dropped":
-                break
-            default:
-                break
+                switch savedShows[i][j].schedual?.status
+                {
+                case "watching":
+                    break
+                case "backlog":
+                    savedShows[i][j].schedual!.startDate = newDate
+                    print("changing startdate to \( savedShows[i][j].schedual!.startDate)")
+                    break
+                case "completed":
+                    savedShows[i][j].schedual!.endDate = newDate
+                    print("changing enddate to \( savedShows[i][j].schedual!.endDate)")
+                    break
+                case "dropped":
+                    break
+                default:
+                    break
+                }
             }
         }
         saveShows(showArr: savedShows)
     }
     
-    
+    //MARK: UIPickerView
     func numberOfComponents(in pickerView: UIPickerView) -> Int
     {
         return 1
@@ -145,6 +188,7 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
         loadStatusInfoViews()
     }
     
+    //MARK: display correct views
     func loadStatusInfoViews()
     {
         let currStatus = statusOptions.firstIndex(of: show.schedual?.status ?? "") ?? 0
@@ -156,6 +200,7 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
             
             seasonInfoLabel.isHidden = true
             seasonInfoStepper.isHidden = true
+            
             episodeInfoLabel.isHidden = true
             episodeInfoStepper.isHidden = true
             break
@@ -165,17 +210,24 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
             schedualInfoDatePickerView.isHidden = true
             
             seasonInfoLabel.isHidden = false
+            seasonInfoLabel.text = "season \(show.schedual?.currSeason ?? -1)"
             seasonInfoStepper.isHidden = false
+            seasonInfoStepper.value = Double(show.schedual?.currSeason ?? -1)
+            
             episodeInfoLabel.isHidden = false
+            episodeInfoLabel.text = "episode \(show.schedual?.currEpisode ?? -1)"
             episodeInfoStepper.isHidden = false
+            episodeInfoStepper.value = Double(show.schedual?.currEpisode ?? -1)
             break
         case 2: //backlog
             schedualInfoLabel.isHidden = false
             schedualInfoLabel.text = "start on"
             schedualInfoDatePickerView.isHidden = false
+            schedualInfoDatePickerView.setDate(show.schedual?.startDate ?? Date(), animated: true)
             
             seasonInfoLabel.isHidden = true
             seasonInfoStepper.isHidden = true
+            
             episodeInfoLabel.isHidden = true
             episodeInfoStepper.isHidden = true
             break
@@ -183,9 +235,11 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
             schedualInfoLabel.isHidden = false
             schedualInfoLabel.text = "completed on"
             schedualInfoDatePickerView.isHidden = false
+            schedualInfoDatePickerView.setDate(show.schedual?.endDate ?? Date(), animated: true)
             
             seasonInfoLabel.isHidden = true
             seasonInfoStepper.isHidden = true
+            
             episodeInfoLabel.isHidden = true
             episodeInfoStepper.isHidden = true
             break
@@ -195,9 +249,16 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
             schedualInfoDatePickerView.isHidden = true
             
             seasonInfoLabel.isHidden = false
+            seasonInfoLabel.text = "season \(show.schedual?.currEpisode ?? -1)"
             seasonInfoStepper.isHidden = false
+            seasonInfoStepper.value = Double(show.schedual?.currSeason ?? -1)
+
+            
             episodeInfoLabel.isHidden = false
+            episodeInfoLabel.text = "episode \(show.schedual?.currEpisode ?? -1)"
             episodeInfoStepper.isHidden = false
+            episodeInfoStepper.value = Double(show.schedual?.currEpisode ?? -1)
+
             break
         default:
             schedualInfoLabel.isHidden = true
@@ -205,20 +266,11 @@ class SingleShowViewController: UIViewController, UIPickerViewDelegate, UIPicker
             
             seasonInfoLabel.isHidden = true
             seasonInfoStepper.isHidden = true
+            
             episodeInfoLabel.isHidden = true
             episodeInfoStepper.isHidden = true
         }
 
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -22,6 +22,7 @@
 		3D6FA37F233C8549005640BE /* SearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6FA37E233C8549005640BE /* SearchResultTableViewCell.swift */; };
 		3DAECB59234A5A13005ACC23 /* SingleShowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAECB58234A5A13005ACC23 /* SingleShowViewController.swift */; };
 		3DBE3743234FC41C0067C625 /* SectionCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBE3742234FC41C0067C625 /* SectionCollectionReusableView.swift */; };
+		BE3A7EB6235977C400C0E1DF /* createShowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE3A7EB5235977C400C0E1DF /* createShowViewController.swift */; };
 		BEB11B3C2354503E00CE91BC /* secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB11B3B2354503E00CE91BC /* secrets.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,7 @@
 		3D6FA37E233C8549005640BE /* SearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		3DAECB58234A5A13005ACC23 /* SingleShowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleShowViewController.swift; sourceTree = "<group>"; };
 		3DBE3742234FC41C0067C625 /* SectionCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionCollectionReusableView.swift; sourceTree = "<group>"; };
+		BE3A7EB5235977C400C0E1DF /* createShowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createShowViewController.swift; sourceTree = "<group>"; };
 		BEB11B3B2354503E00CE91BC /* secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = secrets.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -122,6 +124,7 @@
 				3DAECB58234A5A13005ACC23 /* SingleShowViewController.swift */,
 				3D6FA378233B433B005640BE /* Show.swift */,
 				3D6FA345233B319D005640BE /* Main.storyboard */,
+				BE3A7EB5235977C400C0E1DF /* createShowViewController.swift */,
 				3D331B5823466BF000EA601B /* AddShowViewController.swift */,
 				3D6FA37E233C8549005640BE /* SearchResultTableViewCell.swift */,
 				BEB11B3B2354503E00CE91BC /* secrets.swift */,
@@ -288,6 +291,7 @@
 				3D331B5923466BF000EA601B /* AddShowViewController.swift in Sources */,
 				3DAECB59234A5A13005ACC23 /* SingleShowViewController.swift in Sources */,
 				3D6FA344233B319D005640BE /* ViewController.swift in Sources */,
+				BE3A7EB6235977C400C0E1DF /* createShowViewController.swift in Sources */,
 				3D6FA34A233B319D005640BE /* Binge_Tracker.xcdatamodeld in Sources */,
 				3D6FA37D233C1830005640BE /* AddViewController.swift in Sources */,
 				BEB11B3C2354503E00CE91BC /* secrets.swift in Sources */,

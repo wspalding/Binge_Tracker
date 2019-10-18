@@ -8,7 +8,7 @@
 
 import UIKit
 
-class createShowViewController: UIViewController
+class createShowViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate
 {
 
     //MARK: variables
@@ -24,29 +24,77 @@ class createShowViewController: UIViewController
     @IBOutlet weak var numberOfSeasonsTextField: UITextField!
     @IBOutlet weak var createButton: UIButton!
     
+    var imagePicker = UIImagePickerController()
+    
+    var newShow: Show?
     
     
     //MARK: viewDidLoad
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        // Do any additional setup after loading the view.
         plotTextView.layer.borderColor = UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 1.0).cgColor
         plotTextView.layer.borderWidth = 0.5
         plotTextView.layer.cornerRadius = 5.0
-        // Do any additional setup after loading the view.
+        
+        imagePicker.delegate = self
+        
     }
     
     
     //MARK: IBActions
     @IBAction func addImageButtonPressed(_ sender: UIButton)
     {
-        
+        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
+        {
+//            print("Button capture")
+            
+            imagePicker.sourceType = .photoLibrary
+//            imagePicker.sourceType = .savedPhotosAlbum
+            imagePicker.allowsEditing = false
+
+            present(imagePicker, animated: true, completion: nil)
+        }
     }
     
     @IBAction func createShowButtonPressed(_ sender: UIButton)
     {
-        
+        if let title = titleTextField.text
+        {
+            let info: [String:String] = ["Type": typeTextField.text ?? "custum",
+                                         "Genre": genreTextField.text ?? "n/a",
+                                         "Released": releaseDateTextField.text ?? "n/a",
+                                         "Metascore":metaScoreTextField.text ?? "n/a",
+                                         "imdbRating": imdbRatingTextField.text ?? "n/a",
+                                         "Runtime": runtimeTextField.text ?? "n/a",
+                                         "totalSeasons": numberOfSeasonsTextField.text ?? "n/a"]
+            newShow = Show(_name: title, _image: imageButton.image(for: UIControl.State.normal), _info: info)
+            performSegue(withIdentifier: "show3", sender: self)
+        }
     }
     
+    //MARK: Set Image
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
+    {
+//        print("setting image")
+        if let image = info[.originalImage] as? UIImage
+        {
+            imageButton.setImage(image.withRenderingMode(.alwaysOriginal), for: UIControl.State.normal)
+            imageButton.setImage(image.withRenderingMode(.alwaysOriginal), for: UIControl.State.highlighted)
+            dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
+    {
+        dismiss(animated: true, completion: nil)
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! SingleShowViewController
+        vc.show = newShow ?? Show(_name: "N/A", _image: UIImage(named: "image_not_found")!, _info: [:])
+    }
 
 }

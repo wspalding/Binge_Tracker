@@ -62,15 +62,26 @@ class createShowViewController: UIViewController, UINavigationControllerDelegate
     {
         if let title = titleTextField.text
         {
-            let info: [String:String] = ["Type": typeTextField.text ?? "custum",
-                                         "Genre": genreTextField.text ?? "n/a",
-                                         "Released": releaseDateTextField.text ?? "n/a",
-                                         "Metascore":metaScoreTextField.text ?? "n/a",
-                                         "imdbRating": imdbRatingTextField.text ?? "n/a",
-                                         "Runtime": runtimeTextField.text ?? "n/a",
-                                         "totalSeasons": numberOfSeasonsTextField.text ?? "n/a"]
-            newShow = Show(_name: title, _image: imageButton.image(for: UIControl.State.normal), _info: info)
-            performSegue(withIdentifier: "show3", sender: self)
+            if title != ""
+            {
+                let info: [String:String] = [
+                    "Type": typeTextField.text ?? "custum",
+                    "Genre": genreTextField.text ?? "n/a",
+                    "Released": releaseDateTextField.text ?? "n/a",
+                    "Metascore":metaScoreTextField.text ?? "n/a",
+                    "imdbRating": imdbRatingTextField.text ?? "n/a",
+                    "Runtime": runtimeTextField.text ?? "n/a",
+                    "totalSeasons": numberOfSeasonsTextField.text ?? "n/a"]
+                newShow = Show(_name: title, _image: imageButton.image(for: UIControl.State.normal), _info: info)
+                titleTextField.layer.borderWidth = 0.0
+                performSegue(withIdentifier: "show3", sender: self)
+            }
+            else
+            {
+                titleTextField.layer.borderColor = UIColor.red.cgColor
+                titleTextField.layer.borderWidth = 0.5
+                titleTextField.layer.cornerRadius = 5.0
+            }
         }
     }
     
@@ -80,12 +91,30 @@ class createShowViewController: UIViewController, UINavigationControllerDelegate
 //        print("setting image")
         if let image = info[.originalImage] as? UIImage
         {
-            imageButton.setImage(image.withRenderingMode(.alwaysOriginal), for: UIControl.State.normal)
-            imageButton.setImage(image.withRenderingMode(.alwaysOriginal), for: UIControl.State.highlighted)
+            let aspectHeight = imageButton.frame.height / image.size.height
+            let aspectWidth = imageButton.frame.width / image.size.width
+            let aspectRatio = min(aspectHeight, aspectWidth)
+            let newHeight = image.size.height * aspectRatio
+            let newWidth = image.size.width * aspectRatio
+            print("image frame = \(imageButton.frame.height)x\(imageButton.frame.width)")
+            print("new image size = \(newHeight)x\(newWidth)")
+            let newImage = resizeImage(image: image, to: CGSize(width: newWidth, height: newHeight))
+            imageButton.imageView?.contentMode = .scaleAspectFit
+            imageButton.setImage(newImage.withRenderingMode(.alwaysOriginal), for: UIControl.State.normal)
+            imageButton.setTitle("", for: UIControl.State.normal)
+
             dismiss(animated: true, completion: nil)
         }
     }
     
+    func resizeImage(image: UIImage, to newSize:CGSize) -> UIImage
+    {
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
+        image.draw(in: CGRect(origin: CGPoint.zero, size: CGSize(width: newSize.width, height: newSize.height)))
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return newImage
+    }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
     {
